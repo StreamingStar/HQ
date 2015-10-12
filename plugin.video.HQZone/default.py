@@ -122,15 +122,14 @@ def getstreams(url,name):
     response = net().http_GET(url)
     link = response.content
     link = cleanHex(link)
-    link=link.replace('\r','').replace('\n','').replace('\t','').replace('&nbsp;','').replace('  ','')
-    swf='http://p.jwpcdn.com/6/11/jwplayer.flash.swf'
-    strurl=re.compile(':"(.+?)",').findall(link)[0]
-    playable = strurl#+' swfUrl='+swf+' pageUrl='+url+' live=true timeout=20 token=WY846p1E1g15W7s'
+    link=link.replace('\r','').replace('\n','').replace('\t','').replace('&nbsp;','').replace('&quot;','')
+    strurl=re.compile('ipadUrl:(.+?),urlResolvers').findall(link)[0]
+    print strurl
     ok=True
     liz=xbmcgui.ListItem(name, iconImage=icon,thumbnailImage=icon); liz.setInfo( type="Video", infoLabels={ "Title": name } )
     ok=xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]),url=url,listitem=liz)
     try:
-        xbmc.Player ().play(playable, liz, False)
+        xbmc.Player ().play(strurl, liz, False)
     except:
         pass
 
